@@ -14,8 +14,8 @@ public class IncidentController {
     public List<Incident> getIncidents() {
         Incident example = new Incident(
                 1L,
-                "Mistenkelig innlogging",
-                "Flere mislykkede innloggingsforsøk ble registrert.",
+                "Suspicious login",
+                "Several failed login attempts were detected.",
                 "OPEN"
         );
 

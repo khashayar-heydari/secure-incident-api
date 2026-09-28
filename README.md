@@ -35,8 +35,8 @@ Example response from `GET /api/incidents`:
 [
   {
     "id": 1,
-    "title": "Mistenkelig innlogging",
-    "description": "Flere mislykkede innloggingsforsøk ble registrert.",
+    "title": "Suspicious login",
+    "description": "Several failed login attempts were detected.",
     "status": "OPEN"
   }
 ]
