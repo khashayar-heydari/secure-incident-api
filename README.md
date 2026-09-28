@@ -27,6 +27,7 @@ The application starts at `http://localhost:8080`. Press `Ctrl+C` in the termina
 | --- | --- | --- |
 | GET | `/api/health` | The text `OK` |
 | GET | `/api/incidents` | A list containing one fixed example incident |
+| GET | `/api/incidents/{id}` | The incident with that ID, or 404 if it does not exist |
 
 Example response from `GET /api/incidents`:
 
