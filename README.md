@@ -6,10 +6,11 @@ The current version provides a health endpoint and returns two fixed example inc
 
 ## Requirements
 
-- Java 21
-- Windows with PowerShell
+- Java 21 (JDK)
 
 The project includes a Maven Wrapper, so a separate Maven installation is not required.
+
+The commands below are written for Windows PowerShell.
 
 ## Run locally
 
@@ -56,6 +57,9 @@ An unknown ID, such as `/api/incidents/3`, returns HTTP 404.
 ```powershell
 .\mvnw.cmd test
 ```
+
+The current automated test checks that the Spring application context loads.
+The endpoints have also been checked manually in a browser.
 
 ## Current limitations
 
