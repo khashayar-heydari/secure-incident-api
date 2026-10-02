@@ -12,14 +12,21 @@ public class IncidentController {
 
     @GetMapping("/api/incidents")
     public List<Incident> getIncidents() {
-        Incident example = new Incident(
+        Incident firstIncident = new Incident(
                 1L,
                 "Suspicious login",
                 "Several failed login attempts were detected.",
                 "OPEN"
         );
 
-        return List.of(example);
+        Incident secondIncident = new Incident(
+                2L,
+                "Phishing email",
+                "An employee reported an email containing a suspicious link.",
+                "OPEN"
+        );
+
+        return List.of(firstIncident, secondIncident);
     }
 
     @GetMapping("/api/incidents/{id}")

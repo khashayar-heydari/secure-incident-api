@@ -2,7 +2,7 @@
 
 A small Java and Spring Boot project for learning how to build a REST API for security incidents.
 
-The current version provides a health endpoint and returns one fixed example incident. Incidents are not stored in a database yet.
+The current version provides a health endpoint and returns two fixed example incidents. Incidents are not stored in a database yet.
 
 ## Requirements
 
@@ -26,7 +26,7 @@ The application starts at `http://localhost:8080`. Press `Ctrl+C` in the termina
 | Method | Path | Current response |
 | --- | --- | --- |
 | GET | `/api/health` | The text `OK` |
-| GET | `/api/incidents` | A list containing one fixed example incident |
+| GET | `/api/incidents` | A list containing two fixed example incidents |
 | GET | `/api/incidents/{id}` | The incident with that ID, or 404 if it does not exist |
 
 Example response from `GET /api/incidents`:
@@ -38,9 +38,18 @@ Example response from `GET /api/incidents`:
     "title": "Suspicious login",
     "description": "Several failed login attempts were detected.",
     "status": "OPEN"
+  },
+  {
+    "id": 2,
+    "title": "Phishing email",
+    "description": "An employee reported an email containing a suspicious link.",
+    "status": "OPEN"
   }
 ]
 ```
+
+To retrieve a single incident, use `/api/incidents/1` or `/api/incidents/2`.
+An unknown ID, such as `/api/incidents/3`, returns HTTP 404.
 
 ## Run tests
 
@@ -50,4 +59,4 @@ Example response from `GET /api/incidents`:
 
 ## Current limitations
 
-The incident is created directly in `IncidentController`. The API does not yet support creating or changing incidents, database storage, or authentication. These are possible future steps.
+The incidents are created directly in `IncidentController`. The API does not yet support creating or changing incidents, database storage, or authentication. These are possible future steps.
