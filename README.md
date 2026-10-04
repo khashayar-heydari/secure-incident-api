@@ -58,8 +58,9 @@ An unknown ID, such as `/api/incidents/3`, returns HTTP 404.
 .\mvnw.cmd test
 ```
 
-The current automated test checks that the Spring application context loads.
-The endpoints have also been checked manually in a browser.
+The automated tests check that the Spring application context loads and that
+GET /api/health returns HTTP 200 with the response body OK.
+The incident endpoints have also been checked manually in a browser.
 
 ## Current limitations
 
