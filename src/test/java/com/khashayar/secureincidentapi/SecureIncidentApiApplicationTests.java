@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -32,5 +33,16 @@ class SecureIncidentApiApplicationTests {
     void unknownIncidentReturnsNotFound() throws Exception {
         mockMvc.perform(get("/api/incidents/999"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void existingIncidentReturnsCorrectData() throws Exception {
+        mockMvc.perform(get("/api/incidents/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.title").value("Suspicious login"))
+                .andExpect(jsonPath("$.description")
+                        .value("Several failed login attempts were detected."))
+                .andExpect(jsonPath("$.status").value("OPEN"));
     }
 }
