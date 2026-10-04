@@ -54,13 +54,21 @@ An unknown ID, such as `/api/incidents/3`, returns HTTP 404.
 
 ## Run tests
 
+Open a terminal in the project folder and run:
+
 ```powershell
 .\mvnw.cmd test
 ```
 
-The automated tests check that the Spring application context loads and that
-GET /api/health returns HTTP 200 with the response body OK.
-The incident endpoints have also been checked manually in a browser.
+The project currently has five automated tests that check:
+
+- The Spring application context loads.
+- `GET /api/health` returns HTTP 200 with the response body `OK`.
+- `GET /api/incidents/999` returns HTTP 404.
+- `GET /api/incidents/1` returns HTTP 200 with the expected ID, title, description, and status.
+- `GET /api/incidents` returns HTTP 200 and a JSON array containing two incidents with the expected IDs and titles.
+
+The endpoint tests use MockMvc to simulate requests without starting a real web server.
 
 ## Current limitations
 
