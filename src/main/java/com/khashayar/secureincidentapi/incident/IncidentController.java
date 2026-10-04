@@ -10,33 +10,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class IncidentController {
 
+    private final IncidentService incidentService;
+
+    public IncidentController(IncidentService incidentService) {
+        this.incidentService = incidentService;
+    }
+
     @GetMapping("/api/incidents")
     public List<Incident> getIncidents() {
-        Incident firstIncident = new Incident(
-                1L,
-                "Suspicious login",
-                "Several failed login attempts were detected.",
-                "OPEN"
-        );
-
-        Incident secondIncident = new Incident(
-                2L,
-                "Phishing email",
-                "An employee reported an email containing a suspicious link.",
-                "OPEN"
-        );
-
-        return List.of(firstIncident, secondIncident);
+        return incidentService.getIncidents();
     }
 
     @GetMapping("/api/incidents/{id}")
     public ResponseEntity<Incident> getIncidentById(@PathVariable Long id) {
-        for (Incident incident : getIncidents()) {
-            if (incident.getId().equals(id)) {
-                return ResponseEntity.ok(incident);
-            }
-        }
-
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.of(incidentService.getIncidentById(id));
     }
 }

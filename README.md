@@ -52,6 +52,15 @@ Example response from `GET /api/incidents`:
 To retrieve a single incident, use `/api/incidents/1` or `/api/incidents/2`.
 An unknown ID, such as `/api/incidents/3`, returns HTTP 404.
 
+## Code structure
+
+- `Incident` represents an incident with an ID, title, description, and status.
+- `IncidentController` handles HTTP requests and responses for the incident endpoints.
+- `IncidentService` creates the example incidents and looks up incidents by ID.
+- `HealthController` provides the health endpoint.
+
+`IncidentController` receives an `IncidentService` through constructor injection. This separates HTTP handling from the logic for retrieving incidents.
+
 ## Run tests
 
 Open a terminal in the project folder and run:
@@ -72,4 +81,6 @@ The endpoint tests use MockMvc to simulate requests without starting a real web 
 
 ## Current limitations
 
-The incidents are created directly in `IncidentController`. The API does not yet support creating or changing incidents, database storage, or authentication. These are possible future steps.
+The incidents are hardcoded in `IncidentService` and recreated each time its `getIncidents()` method is called.
+
+The API does not yet support creating or changing incidents, database storage, or authentication. These are possible future steps.
