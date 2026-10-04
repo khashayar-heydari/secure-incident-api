@@ -27,4 +27,10 @@ class SecureIncidentApiApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(content().string("OK"));
     }
+
+    @Test
+    void unknownIncidentReturnsNotFound() throws Exception {
+        mockMvc.perform(get("/api/incidents/999"))
+                .andExpect(status().isNotFound());
+    }
 }
