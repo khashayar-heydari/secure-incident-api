@@ -45,4 +45,16 @@ class SecureIncidentApiApplicationTests {
                         .value("Several failed login attempts were detected."))
                 .andExpect(jsonPath("$.status").value("OPEN"));
     }
+
+    @Test
+    void incidentsEndpointReturnsBothIncidents() throws Exception {
+        mockMvc.perform(get("/api/incidents"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].title").value("Suspicious login"))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].title").value("Phishing email"));
+    }
 }
