@@ -1,6 +1,8 @@
 package com.khashayar.secureincidentapi;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -90,5 +92,39 @@ class SecureIncidentApiApplicationTests {
                 .andExpect(jsonPath("$.description")
                         .value("Antivirus detected a suspicious file."))
                 .andExpect(jsonPath("$.status").value("OPEN"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            """
+            {"title": "", "description": "A suspicious file was detected."}
+            """,
+            """
+            {"title": "   ", "description": "A suspicious file was detected."}
+            """,
+            """
+            {"description": "A suspicious file was detected."}
+            """,
+            """
+            {"title": "Malware detected", "description": ""}
+            """,
+            """
+            {"title": "Malware detected", "description": "   "}
+            """,
+            """
+            {"title": "Malware detected"}
+            """
+    })
+    @DirtiesContext
+    void invalidIncidentIsRejectedWithoutBeingStored(String requestBody)
+            throws Exception {
+        mockMvc.perform(post("/api/incidents")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(get("/api/incidents"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2));
     }
 }

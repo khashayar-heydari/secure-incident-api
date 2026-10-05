@@ -1,8 +1,13 @@
 package com.khashayar.secureincidentapi.incident;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class CreateIncidentRequest {
 
+    @NotBlank(message = "Title must not be blank")
     private String title;
+
+    @NotBlank(message = "Description must not be blank")
     private String description;
 
     public CreateIncidentRequest() {

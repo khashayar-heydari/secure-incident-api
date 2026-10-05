@@ -2,7 +2,9 @@
 
 A small Java and Spring Boot project for learning how to build a REST API for security incidents.
 
-The current version supports creating and retrieving incidents. Data is stored in memory while the application runs. Each restart restores the two example incidents and removes any incidents created during the previous run.
+The current version supports creating and retrieving incidents, with validation of incoming titles and descriptions.
+
+Data is stored in memory while the application runs. Each restart restores the two example incidents and removes any incidents created during the previous run.
 
 ## Requirements
 
@@ -31,7 +33,7 @@ To try the API using the commands below, keep the application running and open a
 | GET | `/api/health` | HTTP 200 with the text `OK` |
 | GET | `/api/incidents` | HTTP 200 with all incidents |
 | GET | `/api/incidents/{id}` | HTTP 200 with the matching incident, or HTTP 404 if it does not exist |
-| POST | `/api/incidents` | HTTP 201 with the created incident and a `Location` header |
+| POST | `/api/incidents` | HTTP 201 with the created incident and a `Location` header, or HTTP 400 for invalid input |
 
 ## Retrieve incidents
 
@@ -97,12 +99,35 @@ Retrieve that incident with:
 Invoke-RestMethod -Uri "http://localhost:8080/api/incidents/3" -Method Get
 ```
 
-Each POST request creates another incident with a new ID. Created incidents also appear in `GET /api/incidents`.
+Each valid POST request creates another incident with a new ID. Created incidents also appear in `GET /api/incidents`.
+
+## Input validation
+
+Both `title` and `description` are required and must contain non-whitespace text.
+
+The API rejects a request if either field:
+
+- Is missing or null.
+- Contains an empty string.
+- Contains only whitespace.
+
+Invalid requests return HTTP 400 and do not create an incident.
+
+For example, this request is rejected because the title is blank:
+
+```json
+{
+  "title": "",
+  "description": "Antivirus detected a suspicious file."
+}
+```
+
+Validation uses Jakarta Bean Validation, with `@NotBlank` on the request fields and `@Valid` on the controller's request parameter.
 
 ## Code structure
 
 - `Incident` represents an incident with an ID, title, description, and status.
-- `CreateIncidentRequest` holds the title and description from a creation request.
+- `CreateIncidentRequest` holds the title and description from a creation request and defines their validation rules.
 - `IncidentController` handles HTTP requests and responses for the incident endpoints.
 - `IncidentService` stores incidents in memory, looks them up by ID, and creates new incidents.
 - `HealthController` provides the health endpoint.
@@ -117,7 +142,9 @@ Open a terminal in the project folder and run:
 .\mvnw.cmd test
 ```
 
-The project currently has six automated tests that check:
+The test suite currently runs 12 test cases.
+
+Six cases check that:
 
 - The Spring application context loads.
 - `GET /api/health` returns HTTP 200 with the response body `OK`.
@@ -126,16 +153,18 @@ The project currently has six automated tests that check:
 - The initial incident list contains the two expected example incidents.
 - Creating an incident returns HTTP 201, the expected data, and a `Location` header, and the incident can then be retrieved by ID.
 
+A parameterized test runs six additional cases. It checks empty, whitespace-only, and missing values for the title and description separately. Each case verifies HTTP 400 and checks that the incident list still contains only the two initial incidents.
+
 The endpoint tests use MockMvc to simulate requests without starting a real web server.
 
-The creation test uses `@DirtiesContext` so its changes to the in-memory data do not affect subsequent tests.
+The creation and validation tests use `@DirtiesContext` to isolate changes to the in-memory data between tests.
 
 ## Current limitations
 
 - Data is stored only in memory and is lost when the application stops.
 - The application starts with two hardcoded example incidents.
 - Updating and deleting incidents are not implemented.
-- Titles and descriptions are not yet validated.
+- Validation checks for blank fields but does not yet limit text length.
 - Authentication and authorization are not implemented.
 
-Database storage, input validation, and security are planned future steps.
+Database storage, further validation, and security are planned future steps.

@@ -3,6 +3,8 @@ package com.khashayar.secureincidentapi.incident;
 import java.net.URI;
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +33,7 @@ public class IncidentController {
 
     @PostMapping("/api/incidents")
     public ResponseEntity<Incident> createIncident(
-            @RequestBody CreateIncidentRequest request
+            @Valid @RequestBody CreateIncidentRequest request
     ) {
         Incident incident = incidentService.createIncident(
                 request.getTitle(),
